@@ -11,7 +11,6 @@
 DWORD WINAPI Fun1Proc(__in  LPVOID lpParameter);
 
 int iIndx = 0;
-int iTickets = 100;
 
 int main()
 {
