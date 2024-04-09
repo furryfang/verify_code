@@ -12,4 +12,4 @@ verify that the list
 bubble sort  
 c语言实现的冒泡排序。  
 ## pointer_func
-指针函数的使用说明和常用方式。
+指针函数的使用说明和常用方式。  
