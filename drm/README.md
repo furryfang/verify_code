@@ -15,7 +15,7 @@ DRM概览架构如下图
 ```mermaid
 flowchart LR;
     flag1((DRM))
-    libdrm-->flag1
-    GEM-->flag1
-    KMS-->flag1
+    libdrm接口库-->flag1
+    GEM更新画面设置显示参数-->flag1
+    KMS内存管理方法-->flag1
 ```
