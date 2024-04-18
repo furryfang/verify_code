@@ -12,6 +12,9 @@
                                 printf("line:%d ",__LINE__); \
                                 printf(fmt,##__VA_ARGS__); \
                                 }while(0)
+
+#define LIST_NODE_NUM 5
+
 /*
 链表节点
 */
@@ -19,6 +22,11 @@ struct node
 {
     void *data;
     struct node *next;
+};
+
+struct data_human 
+{
+    int age;
 };
 
 /*
@@ -199,7 +207,7 @@ struct node* popup_node_frome_tail(struct node **list)
 }
 
 /*
-销毁节点。有些问题，暂未修复
+销毁节点。
 参数
     node:节点。
 返回值
@@ -209,9 +217,19 @@ void destroy_node(struct node **node)
 {
     struct node *temp = *node;
 
-    free(temp->data);
-    temp->data = NULL;
-    node = NULL;
+    if (temp->next != NULL)
+    {
+        LIST_DBG("next not null\n");
+    }
+    else
+    {
+        free(temp->data);
+        temp->data = NULL;
+        free(temp);
+        temp = NULL;
+    }
+
+    
 }
 /*
 销毁链表
@@ -231,15 +249,24 @@ void destroy_list(struct node **list)
         free(head->data);
         head->data = NULL;
         head = head->next;
+        free(temp);
         temp = NULL;
     }
     
 }
 
-struct data_human 
+void show_list_value(struct node **head)
 {
-    int age;
-};
+    int i = 0;
+    struct node *temp = *head;
+    
+    while (temp != NULL )
+    {
+        struct data_human* data = temp->data;
+        LIST_DBG("node %d, data=%d\n", ++i, data->age);
+        temp = temp->next;
+    }
+}
 
 int main()
 {
@@ -247,52 +274,64 @@ int main()
     int i = 0;
     struct node* temp = NULL;
 
-    head = create_list(5);
-    i = 20;
-    temp = head;
+    LIST_DBG("create list:\n");
+    head = create_list(LIST_NODE_NUM);
+    show_list_value(&head);//打印创建的链表
     LIST_DBG("init list:\n");
+    temp = head;
     while (temp != NULL)
     {
         struct data_human* data = NULL;
         data = malloc(sizeof(struct data_human));
-        data->age = i;
+        data->age = i + 20;
         temp->data = data;
-        LIST_DBG("node[%d] age=[%d]\n", i-19, data->age);
         temp = temp->next;
         i++;
     }
+    show_list_value(&head);//打印赋初值的链表
     LIST_DBG("change list:\n");
     temp = head;
     {
-        struct data_human* data = NULL;
-        data = malloc(sizeof(struct data_human));
-        data->age = 222;
+        struct data_human* data1 = NULL;
+        struct data_human* data2 = NULL;
+        struct data_human* data3 = NULL;
+        data1 = malloc(sizeof(struct data_human));
+        data2 = malloc(sizeof(struct data_human));
+        data3 = malloc(sizeof(struct data_human));
+        data1->age = 221;
+        data2->age = 222;
+        data3->age = 223;
 
-        add_node_tail(&head,data);
-        add_node_any(&head,2,data);
-        add_node_head(&head,data);
-
+        add_node_tail(&head,data1);
+        add_node_any(&head,2,data2);
+        add_node_head(&head,data3);
+        show_list_value(&head);//打印改变后的链表
+        LIST_DBG("change list:\n");
+        data1 = NULL;
+        data2 = NULL;
+        data3 = NULL;
         temp = popup_node_frome_head(&head);
-        data = temp->data;
-        LIST_DBG("popup head node age = %d\n", data->age);
-        // destroy_node(&temp);
+        data3 = temp->data;
+        LIST_DBG("popup head node age = %d\n", data3->age);
+        destroy_node(&temp);
 
         temp = popup_node_frome_tail(&head);
-        temp = temp->data;
-        LIST_DBG("popup tail node age = %d\n", data->age);
-        // destroy_node(&temp);
+        data1 = temp->data;
+        LIST_DBG("popup tail node age = %d\n", data1->age);
+        destroy_node(&temp);
     }
+    show_list_value(&head);//打印改变后的链表
+    temp = head;
+
+    // i = 0;
+    // while (head != NULL )
+    // {
+    //     struct data_human* data = head->data;
+    //     LIST_DBG("count %d, d=%d\n", ++i, data->age);
+    //     head = head->next;
+    // }
     
 
-
-    i = 0;
-    while (head != NULL )
-    {
-        struct data_human* data = head->data;
-        LIST_DBG("count %d, d=%d\n", ++i, data->age);
-        head = head->next;
-    }
-
-
+    destroy_list(&temp);
     return 0;
 }
