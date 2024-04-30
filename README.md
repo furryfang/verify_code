@@ -10,6 +10,8 @@ verify that the thread exists when the main process exits
 ## module_oneway_list.c  
 verify that the list  
 一个简单的单向链表，包含创建/删除/增加/弹出 操作。    
+## module_twoway_list.c
+一个简单的双向链表。为了方便取头节点，将链表单独成一个结构体，里面包含头节点，尾节点和长度。
 ## bubble_sort  
 bubble sort  
 c语言实现的冒泡排序。  
